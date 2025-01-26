@@ -1,0 +1,61 @@
+local plr, mouse, tptool, onCooldown, stg
+
+plr = game:GetService("Players").LocalPlayer
+mouse = plr:GetMouse()
+tptool = Instance.new("Tool")
+onCooldown = false
+stg = game:GetService("StarterGui")
+
+tptool.Name = "Blink"
+tptool.RequiresHandle = false
+tptool.Parent = plr.Backpack
+
+function funCooldown()
+    if onCooldown then
+        tptool.Name = "0.5"
+        wait(0.1)
+        tptool.Name = "0.4"
+        wait(0.1)
+        tptool.Name = "0.3"
+        wait(0.1)
+        tptool.Name = "0.2"
+        wait(0.1)
+        tptool.Name = "0.1"
+        wait(0.1)
+        tptool.Name = "Blink"
+        onCooldown = false
+    else
+        print("It's Script Broken?")
+    end
+end
+
+function ntc(m)
+    stg:SetCore("SendNotification", {
+        Title = "NganHa2k3 Script",
+        Text = m,
+        Duration = 1.5,
+    })
+end
+
+tptool.Activated:Connect(function()
+    local cr = plr.Character or workspace:FindFirstChild(plr.Name)
+    local hrp = cr and cr:FindFirstChild("HumanoidRootPart")
+    if not cr or not hrp then
+        return print("Failed !")
+    end
+    
+    local TPos = mouse.Hit.p
+    local Dis = _G.Dis or 50
+    local currentPos = hrp.Position
+    local direction = (TPos - currentPos).unit
+    local limitedTPos = currentPos + direction * Dis
+
+    hrp.CFrame = CFrame.new(limitedTPos.X, limitedTPos.Y + 2, limitedTPos.Z)
+    onCooldown = true
+    print("Re-Use Disable")
+    funCooldown()
+    task.wait()
+    print("Re-Use Enable")
+end)
+
+ntc("Teleportation tool is in your inventory...")
