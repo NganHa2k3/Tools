@@ -59,3 +59,4 @@ tptool.Activated:Connect(function()
 end)
 
 ntc("Teleportation tool is in your inventory...")
+ntc("_G.Dis = value to changed Tool Range.")
