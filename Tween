@@ -1,0 +1,75 @@
+local plr, mouse, tweeningTool, onCooldown, stg, TweenService
+
+plr = game:GetService("Players").LocalPlayer
+mouse = plr:GetMouse()
+tweeningTool = Instance.new("Tool")
+onCooldown = false
+stg = game:GetService("StarterGui")
+TweenService = game:GetService("TweenService")
+
+tweeningTool.Name = "Tweening"
+tweeningTool.RequiresHandle = false
+tweeningTool.Parent = plr.Backpack
+
+_G.TweenSpeed = _G.TweenSpeed or 250
+
+function funCooldown()
+    if onCooldown then
+        tweeningTool.Name = "0.5"
+        wait(0.1)
+        tweeningTool.Name = "0.4"
+        wait(0.1)
+        tweeningTool.Name = "0.3"
+        wait(0.1)
+        tweeningTool.Name = "0.2"
+        wait(0.1)
+        tweeningTool.Name = "0.1"
+        wait(0.1)
+        tweeningTool.Name = "Tweening"
+        onCooldown = false
+    else
+        print("It's Script Broken?")
+    end
+end
+
+function ntc(m)
+    stg:SetCore("SendNotification", {
+        Title = "NganHa2k3 Script",
+        Text = m,
+        Duration = 1.5,
+    })
+end
+
+tweeningTool.Activated:Connect(function()
+    local cr = plr.Character or workspace:FindFirstChild(plr.Name)
+    local hrp = cr and cr:FindFirstChild("HumanoidRootPart")
+    if not cr or not hrp then
+        return print("Failed!")
+    end
+    
+    local TPos = mouse.Hit.p
+    local Dis = _G.Dis or 50
+    local currentPos = hrp.Position
+    local direction = (TPos - currentPos).unit
+    local limitedTPos = currentPos + direction * Dis
+
+    local goalCFrame = CFrame.new(limitedTPos.X, limitedTPos.Y + 2, limitedTPos.Z)
+
+    local tweenInfo = TweenInfo.new(
+        (limitedTPos - currentPos).magnitude / _G.TweenSpeed,
+        Enum.EasingStyle.Linear,
+        Enum.EasingDirection.Out
+    )
+
+    local goal = {CFrame = goalCFrame}
+
+    local tween = TweenService:Create(hrp, tweenInfo, goal)
+    tween:Play()
+    
+    onCooldown = true
+    funCooldown()
+    task.wait()
+end)
+
+ntc("Tweening tool is in your inventory...")
+ntc("_G.Dis = value to changed Tool Range, _G.TweenSpeed = value to changed Tweening Speed.")
